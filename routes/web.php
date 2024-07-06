@@ -14,4 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Default welcome route
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::get('execute-commands', [SettingsController::class, 'executeCommands'])->name('executeCommands');

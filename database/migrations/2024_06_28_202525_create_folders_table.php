@@ -21,8 +21,6 @@ class CreateFoldersTable extends Migration
             $table->unsignedBigInteger('modifier_id');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('parent_id')->references('id')->on('folders')->onDelete('cascade');
         });
     }
 

@@ -32,7 +32,7 @@ class File extends Model
             'id'            => $this->uuid,
             'name'          => $this->file_name,
             'type'          => $this->type,
-            'path'          => config('app.url').'/storage/'.$this->path,
+            'path'          => config('app.file_url').$this->path,
             'size'          => formatFileSize($this->size),
             'modifiedBy'    => $this->modifier->displayName,
             'modifiedOn'    => $this->updated_at->diffForHumans()

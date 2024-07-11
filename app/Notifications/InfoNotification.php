@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Role;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,14 +12,22 @@ class InfoNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected $message;
+    protected $attachment;
+    protected $subject;
+    protected $cc;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($message, $subject = "Info", $cc = [], $attachment = [])
     {
-        //
+        $this->message = $message;
+        $this->subject = $subject;
+        $this->cc = $cc;
+        $this->attachment = $attachment;
     }
 
     /**
@@ -40,10 +49,28 @@ class InfoNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        $user = $notifiable;
+        $info = $this->message;
+        $subject = $this->subject ?? 'Info';
+        $displayName = $user->displayName ?? 'User';
+
+        $mail = (new MailMessage)
+            ->subject(config('app.name') . " - " . $subject)
+            ->view('mails.info', compact('user', 'info', 'displayName'));
+
+        if ($this->cc) {
+            $mail = $mail->cc($this->cc);
+        }
+
+        if ($this->attachment) {
+            $mail = $mail->attach($this->attachment['saved_path'], [
+                'as' => $this->attachment['name'],
+            ]);
+        }
+
+        $displayName = null;
+
+        return $mail;
     }
 
     /**

@@ -25,8 +25,8 @@ class UpdateRequestInformationRequest extends FormRequest
     {
         return [
             'status'         => 'required|in:Approved,Rejected,Completed',
-            'red_comment'    => 'required|string',
-            'admin_id'    => 'required|exists:employees,guid'
+            'red_comment'    => 'nullable|string',
+            'admin_id'       => 'required|exists:employees,guid'
         ];
     }
 }

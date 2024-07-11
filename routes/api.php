@@ -25,6 +25,9 @@ Route::middleware('basic.auth')->group(function () {
             Route::get('/folders/{folder:uuid}', [AdminController::class, 'show'])->name('api.admin.folders.show');
             Route::get('/files/{file:uuid}', [AdminController::class, 'showFile'])->name('api.admin.folders.file.show');
             Route::get('/search', [AdminController::class, 'search'])->name('api.admin.folders.search');
+
+            Route::post('/folder/delete', [AdminController::class, 'deleteFolder'])->name('api.admin.folders.delete');
+            Route::post('/file/delete', [AdminController::class, 'deleteFile'])->name('api.admin.files.delete');
         });
         
         Route::prefix('request-information')->group(function() {

@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Traits\GeneratesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Folder extends Model
 {
-    use HasFactory, GeneratesUuid;
+    use HasFactory, GeneratesUuid, SoftDeletes;
 
     protected $fillable = [
         'name', 

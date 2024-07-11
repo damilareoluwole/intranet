@@ -12,6 +12,7 @@ use App\Models\File;
 use App\Models\Folder;
 use App\Models\ResearchInformationRequest;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
@@ -154,6 +155,53 @@ class AdminController extends Controller
         $data['admin_at'] = now();
 
         $information->update($data);
+
+        //Notify the employee
+        if ($requester = Employee::where('guid', $information->requester_id)->first()) {
+            $requester->notify(new InfoNotification("The research information you requested has been {$request->status}.", "Research Info Request - {$request->status}"));
+        }
+
         return successResponse(Response::HTTP_OK, "Record updated successfully", $information->refresh());
+    }
+
+    // Delete folder
+    public function deleteFolder(Request $request, $research_id)
+    {
+        $request->validate([
+            'admin_id'     => 'required|exists:employees,guid',
+            'folder_ids'   => 'required|array',
+            'folder_ids.*' => 'exists:folders,uuid'
+        ]);
+
+        foreach($request->folder_ids as $folder_id) {
+            $folder = Folder::where('uuid', $folder_id)->sole();
+
+            // Delete all files
+            $folder->files()->delete();
+
+            // Delete folder
+            $folder->delete();
+        }
+
+        return successResponse(Response::HTTP_OK, "Folder deleted successfully");
+    }
+
+    // Delete folder
+    public function deleteFile(UpdateRequestInformationRequest $request, $research_id)
+    {
+        $request->validate([
+            'admin_id'     => 'required|exists:employees,guid',
+            'file_ids'   => 'required|array',
+            'file_ids.*' => 'exists:files,uuid'
+        ]);
+
+        foreach($request->file_ids as $file_id) {
+            $file = File::where('uuid', $file_id)->sole();
+
+            // Delete filder
+            $file->delete();
+        }
+
+        return successResponse(Response::HTTP_OK, "File deleted successfully");
     }
 }

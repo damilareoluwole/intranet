@@ -165,15 +165,15 @@ class AdminController extends Controller
     }
 
     // Delete folder
-    public function deleteFolder(Request $request, $research_id)
+    public function deleteFolder(Request $request)
     {
         $request->validate([
             'admin_id'     => 'required|exists:employees,guid',
-            'folder_ids'   => 'required|array',
-            'folder_ids.*' => 'exists:folders,uuid'
+            'folders_id'   => 'required|array',
+            'folders_id.*' => 'exists:folders,uuid'
         ]);
 
-        foreach($request->folder_ids as $folder_id) {
+        foreach($request->folders_id as $folder_id) {
             $folder = Folder::where('uuid', $folder_id)->sole();
 
             // Delete all files
@@ -187,15 +187,15 @@ class AdminController extends Controller
     }
 
     // Delete folder
-    public function deleteFile(UpdateRequestInformationRequest $request, $research_id)
+    public function deleteFile(Request $request)
     {
         $request->validate([
             'admin_id'     => 'required|exists:employees,guid',
-            'file_ids'   => 'required|array',
-            'file_ids.*' => 'exists:files,uuid'
+            'files_id'   => 'required|array',
+            'files_id.*' => 'exists:files,uuid'
         ]);
 
-        foreach($request->file_ids as $file_id) {
+        foreach($request->files_id as $file_id) {
             $file = File::where('uuid', $file_id)->sole();
 
             // Delete filder

@@ -2,7 +2,7 @@
 
 return [
     'group_emails'  => [
-        'red'   => 'amg@fmdqgroup.com'
+        'red'   => 'emmanuel.ukhueleigbe@fmdqgroup.com'
     ],
     'frontend_url' => env('APP_FRONTEND_URL')
 ];

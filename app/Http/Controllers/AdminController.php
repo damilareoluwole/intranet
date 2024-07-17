@@ -135,7 +135,7 @@ class AdminController extends Controller
         return successResponse(Response::HTTP_OK, "Here you go", $information);
     }
 
-    // Update Request information
+    // Update Request information status
     public function requestInformationUpdate(UpdateRequestInformationRequest $request, $research_id)
     {
         if (! $admin = Employee::where('guid', $request->admin_id)->first()) {

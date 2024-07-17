@@ -157,7 +157,7 @@ class AdminController extends Controller
         $information->update($data);
 
         //Notify the employee
-        if ($requester = Employee::where('guid', $information->requester_id)->first()) {
+        if ($requester = Employee::find($information->requester_id)) {
             $requester->notify(new InfoNotification("The research information you requested has been {$request->status}.", "Research Info Request - {$request->status}"));
         }
 

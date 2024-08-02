@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResearchController;
+use App\Http\Controllers\TechnologyGuide\AdminTechnologyGuideController;
+use App\Http\Controllers\TechnologyGuide\TechnologyGuideController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +38,18 @@ Route::middleware('basic.auth')->group(function () {
             Route::get('/requests/{research}', [AdminController::class, 'requestInformationShow'])->name('api.admin.requests.show');
             Route::post('/requests/{research}', [AdminController::class, 'requestInformationUpdate'])->name('api.admin.requests.update');
         });
+
+        Route::prefix('technology-guide')->group(function() {
+            Route::post('/folders/{folder:uuid?}', [AdminTechnologyGuideController::class, 'store'])->name('api.admin.hrfolders.store');
+            Route::post('/folders/{folder:uuid}/files', [AdminTechnologyGuideController::class, 'addFile'])->name('api.admin.hrfolders.file');
+            Route::get('/folders', [AdminTechnologyGuideController::class, 'index'])->name('api.admin.hrfolders.index');
+            Route::get('/folders/{folder:uuid}', [AdminTechnologyGuideController::class, 'show'])->name('api.admin.hrfolders.show');
+            Route::get('/files/{file:uuid}', [AdminTechnologyGuideController::class, 'showFile'])->name('api.admin.hrfolders.file.show');
+            Route::get('/search', [AdminTechnologyGuideController::class, 'search'])->name('api.admin.hrfolders.search');
+
+            Route::post('/folder/delete', [AdminTechnologyGuideController::class, 'deleteFolder'])->name('api.admin.hrfolders.delete');
+            Route::post('/file/delete', [AdminTechnologyGuideController::class, 'deleteFile'])->name('api.admin.hrfiles.delete');
+        });
     });
 
 
@@ -52,6 +66,13 @@ Route::middleware('basic.auth')->group(function () {
             Route::post('/create', [ResearchController::class, 'requestInformation'])->name('api.request.create');
             Route::post('/requests', [ResearchController::class, 'requestInformationIndex'])->name('api.requests.index');
             Route::post('/requests/{research}', [ResearchController::class, 'requestInformationShow'])->name('api.requests.show');
+        });
+
+        Route::prefix('technology-guide')->group(function() {
+            Route::get('/folders', [TechnologyGuideController::class, 'index'])->name('api.hrfolders.index');
+            Route::get('/folders/{folder:uuid}', [TechnologyGuideController::class, 'show'])->name('api.hrfolders.show');
+            Route::get('/files/{file:uuid}', [TechnologyGuideController::class, 'showFile'])->name('api.hrfolders.file.show');
+            Route::get('/search', [TechnologyGuideController::class, 'search'])->name('api.hrfolders.search');
         });
     });
 

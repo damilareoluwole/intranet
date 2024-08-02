@@ -15,9 +15,19 @@ class Employee extends Model
         return $this->hasMany(File::class, 'modifier_id', 'id');
     }
 
+    public function hrfiles()
+    {
+        return $this->hasMany(HrFile::class, 'modifier_id', 'id');
+    }
+
     public function folders()
     {
         return $this->hasMany(Folder::class, 'modifier_id', 'id');
+    }
+
+    public function hrfolders()
+    {
+        return $this->hasMany(HrFolder::class, 'modifier_id', 'id');
     }
 
     public function informationRequests()
